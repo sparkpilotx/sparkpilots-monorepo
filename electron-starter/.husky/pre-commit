@@ -1,3 +1,0 @@
-#!/bin/sh
-npm --prefix electron-starter run typecheck || exit 1
-npx --yes lint-staged --cwd electron-starter || exit 1
