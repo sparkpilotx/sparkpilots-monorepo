@@ -16,7 +16,7 @@
   },
   "model": {
     "name": "gemini-2.5-pro",
-    "maxSessionTurns": 10,
+    "maxSessionTurns": -1,
     "chatCompression": {
       "contextPercentageThreshold": 0.6
     }
