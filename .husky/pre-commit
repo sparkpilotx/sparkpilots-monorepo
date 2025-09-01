@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+
+changed() { git diff --cached --name-only | grep -q "^$1/"; }
+
+# electron-starter checks
+if changed "electron-starter"; then
+  npm --prefix electron-starter run typecheck
+  npx --yes lint-staged --cwd electron-starter
+fi
+
+# Optional: Python projects (pyproject.toml or requirements.txt) if tools exist
+for d in */; do
+  [ -f "$d/pyproject.toml" ] || [ -f "$d/requirements.txt" ] || continue
+  proj=${d%/}
+  if changed "$proj"; then
+    if command -v ruff >/dev/null 2>&1; then
+      (cd "$proj" && ruff format . && ruff check --fix .)
+    fi
+    if command -v mypy >/dev/null 2>&1; then
+      (cd "$proj" && mypy . || true)
+    fi
+  fi
+done
