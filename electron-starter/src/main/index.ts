@@ -19,7 +19,10 @@ function createWindow(): void {
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.cjs'),
-      sandbox: true // `sandbox: true` requires CJS preload script
+      sandbox: true,
+      contextIsolation: true,
+      nodeIntegration: false,
+      devTools: is.dev
     }
   })
 
