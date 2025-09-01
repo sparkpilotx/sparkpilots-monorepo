@@ -2,7 +2,7 @@
 
 ## Platform
 
-- `electron@37.3.1`
+- `electron@37.4.0`
 - `@electron-toolkit/utils@4.0.0`
 
 ## Language & Types
@@ -22,12 +22,12 @@
 ## State & Validation
 
 - `zustand@5.0.8`
-- `immer@10.1.1`
+- `immer@10.1.3`
 - `zod@3.25.67`
 
 ## Internationalization (i18n)
 
-- `i18next@25.4.1` + `react-i18next@15.7.2` (renderer)
+- `i18next@25.4.2` + `react-i18next@15.7.3` (renderer)
 - Single source of truth: JSON under `src/main/shared/i18n/locales/<code>/`
   - `common.json` (renderer UI)
   - `menu.json` (Application Menu labels, loaded in main via `import.meta.glob`)
@@ -36,22 +36,23 @@
 
 ## Data Layer
 
-- `prisma@6.14.0`
-- `@prisma/client@6.14.0`
+- `prisma@6.15.0`
+- `@prisma/client@6.15.0`
 
 ## RPC & Data Fetching
 
 - `@trpc/server@11.5.0` (main, IPC)
 - `@trpc/client@11.5.0` (renderer, custom IPC link)
 - `@trpc/tanstack-react-query@11.5.0` (renderer integration, QueryClient only)
-- `@tanstack/react-query@5.85.5`
+- `@tanstack/react-query@5.85.6`
 - `superjson@2.2.2` (server transformer)
 
 ## Build & Dev Tooling
 
-- `vite@7.1.3`
+- `vite@7.1.4`
 - `electron-vite@4.0.0`
-- `@vitejs/plugin-react@5.0.1`
+- `@vitejs/plugin-react@5.0.2`
+- `@electron-toolkit/tsconfig@1.0.1`
 
 ## Module Format & Runtime Constraints
 
@@ -65,7 +66,7 @@
 - `typescript-eslint@8.41.0`
 - `@typescript-eslint/eslint-plugin@8.41.0`
 - `@typescript-eslint/parser@8.41.0`
-- `eslint-config-prettier@9.1.0`
+- `eslint-config-prettier@10.1.8`
 - `prettier@3.6.2`
 
 ## Packaging & Distribution

@@ -1,3 +1,5 @@
+import type { JSX } from 'react'
+
 function App(): JSX.Element {
   return (
     <div className="h-screen bg-neutral-100 p-6 font-sans text-neutral-800 antialiased">
