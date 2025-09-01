@@ -15,7 +15,21 @@
     "typecheck": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.web.json --noEmit && tsc -p tsconfig.json --noEmit",
     "typecheck:watch": "sh -c \"tsc -w -p tsconfig.node.json --noEmit & tsc -w -p tsconfig.web.json --noEmit & tsc -w -p tsconfig.json --noEmit & wait\"",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,css,json,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@electron-toolkit/utils": "4.0.0",
@@ -50,6 +64,8 @@
     "electron-vite": "4.0.0",
     "eslint": "9.34.0",
     "eslint-config-prettier": "10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6",
     "prettier": "3.6.2",
     "prisma": "6.15.0",
     "tailwindcss": "4.1.12",
