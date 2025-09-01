@@ -22,3 +22,14 @@ for d in */; do
     fi
   fi
 done
+
+# Optional: Deno projects (deno.json/deno.jsonc)
+for d in */; do
+  [ -f "$d/deno.json" ] || [ -f "$d/deno.jsonc" ] || continue
+  proj=${d%/}
+  if changed "$proj"; then
+    if command -v deno >/dev/null 2>&1; then
+      (cd "$proj" && deno fmt --check && deno lint)
+    fi
+  fi
+done
