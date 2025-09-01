@@ -3,10 +3,18 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
 function createWindow(): void {
+  const ASPECT_RATIO = 16 / 9
+  const MIN_WIDTH = 800
+  const INITIAL_WIDTH = 900
+
+  // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 506,
-    aspectRatio: 16 / 9,
+    width: INITIAL_WIDTH,
+    height: Math.round(INITIAL_WIDTH / ASPECT_RATIO),
+    minWidth: MIN_WIDTH,
+    minHeight: Math.round(MIN_WIDTH / ASPECT_RATIO),
+    maximizable: false,
+    fullscreenable: false,
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
@@ -14,6 +22,9 @@ function createWindow(): void {
       sandbox: true // `sandbox: true` requires CJS preload script
     }
   })
+
+  // Set aspect ratio after creating the window to bypass faulty types
+  mainWindow.setAspectRatio(ASPECT_RATIO)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
