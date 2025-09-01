@@ -3,7 +3,6 @@
 .env~
 
 # gemini-cli settings
-.gemini/
 !gemini/config.yaml
 
 # Dependency directory
