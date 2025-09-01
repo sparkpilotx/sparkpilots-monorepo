@@ -1,0 +1,75 @@
+{
+  "general": {
+    "vimMode": false,
+    "preferredEditor": "vscode",
+    "checkpointing": {
+      "enabled": true
+    }
+  },
+  "ui": {
+    "theme": "GitHub",
+    "hideBanner": true,
+    "hideTips": false
+  },
+  "privacy": {
+    "usageStatisticsEnabled": true
+  },
+  "model": {
+    "name": "gemini-2.5-pro",
+    "maxSessionTurns": 10,
+    "chatCompression": {
+      "contextPercentageThreshold": 0.6
+    }
+  },
+  "context": {
+    "fileName": ["GEMINI.md"],
+    "includeDirectories": [
+      "./electron-starter"
+    ],
+    "loadFromIncludeDirectories": true,
+    "fileFiltering": {
+      "respectGitIgnore": true,
+      "respectGeminiIgnore": true,
+      "enableRecursiveFileSearch": true
+    }
+  },
+  "tools": {
+    "discoveryCommand": ".gemini/bin/get_tools",
+    "callCommand": ".gemini/bin/call_tool"
+  },
+  "mcp": {
+    "allowed": [
+      "time"
+    ]
+  },
+  "security": {
+    "auth": {
+      "selectedType": "gemini-api-key"
+    }
+  },
+  "advanced": {
+    "excludedEnvVars": [
+      "DEBUG",
+      "DEBUG_MODE",
+      "NODE_ENV"
+    ]
+  },
+  "mcpServers": {
+    "time": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-time"
+      ],
+      "trust": true,
+      "excludeTools": [
+        "convert_time"
+      ]
+    }
+  },
+  "telemetry": {
+    "enabled": false,
+    "target": "local",
+    "otlpEndpoint": "http://localhost:4317",
+    "logPrompts": true
+  }
+}

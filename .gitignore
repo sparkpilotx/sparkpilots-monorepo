@@ -4,6 +4,7 @@
 
 # gemini-cli settings
 !gemini/config.yaml
+.gemini/.env
 
 # Dependency directory
 node_modules
