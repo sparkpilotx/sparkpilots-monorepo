@@ -1,0 +1,34 @@
+---
+config:
+  flowchart:
+    htmlLabels: true
+---
+flowchart TD
+    subgraph "Electron Process Model"
+        direction TB
+
+        Main["<strong>Main Process</strong><br/>(Node.js)<br/><code>src/main</code>"]
+        Renderer["<strong>Renderer Process</strong><br/>(Chromium)<br/><code>src/renderer</code>"]
+        Preload["<strong>Preload Script</strong><br/>(Secure Bridge)<br/><code>src/preload</code>"]
+    end
+
+    Shared["<strong>Shared Utilities</strong><br/><code>src/shared</code>"]
+
+    Main -- "Manages & Communicates via IPC" --> Renderer
+    Renderer -- "Communicates via IPC" --> Main
+    Main -- "Injects" --> Preload
+    Preload -- "Exposes APIs to" --> Renderer
+
+    Shared -. "Imported by" .-> Main
+    Shared -. "Imported by" .-> Renderer
+    Shared -. "Imported by" .-> Preload
+
+    classDef main fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef renderer fill:#ccf,stroke:#333,stroke-width:2px;
+    classDef preload fill:#9cf,stroke:#333,stroke-width:2px;
+    classDef shared fill:#f99,stroke:#333,stroke-width:2px;
+
+    class Main main;
+    class Renderer renderer;
+    class Preload preload;
+    class Shared shared;
