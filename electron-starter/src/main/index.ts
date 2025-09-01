@@ -1,6 +1,6 @@
 import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { optimizer, is } from '@electron-toolkit/utils'
 
 function createWindow(): void {
   const ASPECT_RATIO = 16 / 9
@@ -30,11 +30,11 @@ function createWindow(): void {
     mainWindow.show()
   })
 
-  mainWindow.webContents.on('console-message', (event) => {
+  mainWindow.webContents.on('console-message', event => {
     console.log(`[Renderer Console] ${event.message}`)
   })
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
+  mainWindow.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })

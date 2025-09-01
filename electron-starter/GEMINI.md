@@ -41,10 +41,10 @@ TypeScript's power lies in its ability to provide static type checking, catching
   function processValue(value: unknown) {
     if (typeof value === 'string') {
       // value is now safely a string
-      console.log(value.toUpperCase());
+      console.log(value.toUpperCase())
     } else if (typeof value === 'number') {
       // value is now safely a number
-      console.log(value * 2);
+      console.log(value * 2)
     }
     // Without narrowing, you cannot access properties or methods on 'value'
     // console.log(value.someProperty); // Error: Object is of type 'unknown'.

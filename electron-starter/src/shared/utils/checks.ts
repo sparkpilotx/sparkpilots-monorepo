@@ -1,4 +1,5 @@
 /* Fail to compile on unexpected values. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function assumeExhaustive(_value: never): void {}
 
 /**
@@ -15,8 +16,8 @@ export function assumeExhaustive(_value: never): void {}
  */
 export function checkExhaustive(
   value: never,
-  msg = `unexpected value ${value}!`,
+  msg = `unexpected value ${value}`
 ): never {
-  assumeExhaustive(value);
-  throw new Error(msg);
+  assumeExhaustive(value)
+  throw new Error(msg)
 }
