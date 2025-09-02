@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 
 export function SettingsScreen(): JSX.Element {
   const [url, setUrl] = useState<string>('')
+  const [geminiKey, setGeminiKey] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
@@ -10,6 +11,8 @@ export function SettingsScreen(): JSX.Element {
         const cfg: { url: string | null } =
           await window.api.settings.proxy.getConfig()
         if (cfg) setUrl(cfg.url ?? '')
+        const key = await window.api.settings.gemini.get()
+        if (typeof key === 'string') setGeminiKey(key)
       } catch {
         setUrl('')
       }
@@ -48,6 +51,48 @@ export function SettingsScreen(): JSX.Element {
           className="rounded bg-neutral-900 px-4 py-2 text-white"
         >
           Save & Apply
+        </button>
+      </form>
+
+      <h2 className="mt-6 text-base font-semibold">AI</h2>
+      <form
+        className="mt-2 flex gap-2"
+        onSubmit={e => {
+          e.preventDefault()
+          const el = e.currentTarget.elements.namedItem(
+            'geminiKey'
+          ) as HTMLInputElement | null
+          const key = el?.value ?? ''
+          window.api.settings.gemini.submit(key)
+        }}
+      >
+        <input
+          type="text"
+          name="geminiKey"
+          placeholder="GEMINI_API_KEY"
+          className="flex-1 rounded border border-neutral-300 px-3 py-2"
+          value={geminiKey}
+          onChange={e => setGeminiKey(e.currentTarget.value)}
+        />
+        <button
+          type="submit"
+          className="rounded bg-neutral-900 px-4 py-2 text-white"
+        >
+          Save
+        </button>
+        <button
+          type="button"
+          className="rounded bg-neutral-700 px-4 py-2 text-white"
+          onClick={async () => {
+            const result = await window.api.settings.gemini.test(geminiKey)
+            alert(
+              result.ok
+                ? 'Gemini API: OK'
+                : `Gemini API Error: ${result.error ?? 'Unknown'}`
+            )
+          }}
+        >
+          Test
         </button>
       </form>
 

@@ -11,6 +11,11 @@ function getProxyConfigPath(): string {
   return path.join(dir, 'proxy.json')
 }
 
+function getSecretsPath(): string {
+  const dir = app.getPath('userData')
+  return path.join(dir, 'secrets.json')
+}
+
 export function applyProxyFromStorage(): void {
   const { url } = loadProxyConfig()
   // Main process (Undici) should always use proxy if URL exists, regardless of toggle
@@ -54,3 +59,30 @@ export function hasStoredProxyUrl(): boolean {
 }
 
 // Internals are intentionally not exported to keep module encapsulation tight per GEMINI.md
+
+type SecretStored = { dataB64: string }
+
+export function saveGeminiApiKey(key: string): void {
+  if (!safeStorage.isEncryptionAvailable()) return
+  const encrypted = safeStorage.encryptString(key)
+  const file = getSecretsPath()
+  mkdirSync(path.dirname(file), { recursive: true })
+  const payload: SecretStored = {
+    dataB64: Buffer.from(encrypted).toString('base64')
+  }
+  writeFileSync(file, JSON.stringify(payload), 'utf8')
+}
+
+export function loadGeminiApiKey(): string | null {
+  try {
+    const file = getSecretsPath()
+    const raw = readFileSync(file, 'utf8')
+    const parsed = JSON.parse(raw) as Partial<SecretStored>
+    if (!parsed || typeof parsed.dataB64 !== 'string') return null
+    const bytes = Buffer.from(parsed.dataB64, 'base64')
+    if (!safeStorage.isEncryptionAvailable()) return null
+    return safeStorage.decryptString(bytes)
+  } catch {
+    return null
+  }
+}
