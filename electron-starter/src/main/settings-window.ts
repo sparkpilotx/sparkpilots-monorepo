@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
-import { configureGlobalUndiciProxy, saveProxyUrl } from './network/proxy'
+import { loadProxyConfig, saveProxyUrl } from './network/proxy'
 
 const settingsWindowRef: { current: BrowserWindow | null } = { current: null }
 
@@ -44,15 +44,18 @@ export function openSettingsWindow(parent: BrowserWindow): void {
 
   const submitProxy = (_: unknown, url: string) => {
     saveProxyUrl(url)
-    configureGlobalUndiciProxy(url)
+    // Renderer setting is applied via storage listeners
   }
   const close = () => settingsWindow.close()
 
   ipcMain.on('settings:proxy:submit', submitProxy)
+  ipcMain.handle('settings:proxy:get-config', () => loadProxyConfig())
   ipcMain.on('settings:close', close)
 
   settingsWindow.on('closed', () => {
     ipcMain.off('settings:proxy:submit', submitProxy)
+    ipcMain.removeAllListeners('settings:proxy:renderer-toggle')
+    ipcMain.removeHandler('settings:proxy:get-config')
     ipcMain.off('settings:close', close)
     settingsWindowRef.current = null
   })

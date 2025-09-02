@@ -9,6 +9,9 @@ const api = {
     proxy: {
       submit(url: string) {
         ipcRenderer.send('settings:proxy:submit', url)
+      },
+      async getConfig() {
+        return ipcRenderer.invoke('settings:proxy:get-config')
       }
     }
   }

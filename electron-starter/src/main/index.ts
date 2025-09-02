@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, Menu } from 'electron'
 import { join } from 'path'
 import { optimizer, is } from '@electron-toolkit/utils'
-import { configureGlobalUndiciProxy, hasStoredProxyUrl } from './network/proxy'
+import { applyProxyFromStorage, hasStoredProxyUrl } from './network/proxy'
 import { openSettingsWindow } from './settings-window'
 
 function createWindow(): BrowserWindow {
@@ -136,7 +136,7 @@ function buildAppMenu(getMain: () => BrowserWindow | undefined): void {
 }
 
 app.whenReady().then(() => {
-  configureGlobalUndiciProxy()
+  applyProxyFromStorage()
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })

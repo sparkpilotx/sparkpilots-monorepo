@@ -1,55 +1,56 @@
 import { app, safeStorage } from 'electron'
-import { ProxyAgent, setGlobalDispatcher } from 'undici'
+import { ProxyAgent, setGlobalDispatcher, Agent } from 'undici'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 
-type EncryptedBlob = {
-  v: 1
-  dataB64: string
-}
+type Stored = { dataB64: string }
+type ProxyConfig = { url: string | null }
 
 function getProxyConfigPath(): string {
   const dir = app.getPath('userData')
   return path.join(dir, 'proxy.json')
 }
 
-export function configureGlobalUndiciProxy(proxyUrl?: string): void {
-  const urlToUse = proxyUrl ?? loadProxyUrl()
-  if (!urlToUse) return
-  const agent = new ProxyAgent(urlToUse)
-  setGlobalDispatcher(agent)
+export function applyProxyFromStorage(): void {
+  const { url } = loadProxyConfig()
+  // Main process (Undici) should always use proxy if URL exists, regardless of toggle
+  if (url) setGlobalDispatcher(new ProxyAgent(url))
+  else setGlobalDispatcher(new Agent())
 }
 
-export function loadProxyUrl(): string | null {
+export function loadProxyConfig(): ProxyConfig {
   try {
     const file = getProxyConfigPath()
     const raw = readFileSync(file, 'utf8')
-    const parsed = JSON.parse(raw) as EncryptedBlob
-    if (!parsed || typeof parsed.dataB64 !== 'string') return null
+    const parsed = JSON.parse(raw) as Partial<Stored>
+    if (!parsed || typeof parsed.dataB64 !== 'string') {
+      return { url: null }
+    }
     const bytes = Buffer.from(parsed.dataB64, 'base64')
     if (!safeStorage.isEncryptionAvailable()) {
-      return null
+      return { url: null }
     }
-    return safeStorage.decryptString(bytes)
+    const url = safeStorage.decryptString(bytes)
+    return { url }
   } catch {
-    return null
+    return { url: null }
   }
 }
 
 export function saveProxyUrl(url: string): void {
   if (!safeStorage.isEncryptionAvailable()) return
   const encrypted = safeStorage.encryptString(url)
-  const blob: EncryptedBlob = {
-    v: 1,
-    dataB64: Buffer.from(encrypted).toString('base64')
-  }
+  const blob: Stored = { dataB64: Buffer.from(encrypted).toString('base64') }
   const file = getProxyConfigPath()
   mkdirSync(path.dirname(file), { recursive: true })
   writeFileSync(file, JSON.stringify(blob), 'utf8')
+  // Re-apply with possibly new URL when enabled
+  applyProxyFromStorage()
 }
 
 export function hasStoredProxyUrl(): boolean {
-  return loadProxyUrl() != null
+  const { url } = loadProxyConfig()
+  return url != null
 }
 
 // Internals are intentionally not exported to keep module encapsulation tight per GEMINI.md
