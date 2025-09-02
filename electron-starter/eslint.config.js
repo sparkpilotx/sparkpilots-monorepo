@@ -33,7 +33,11 @@ export default tseslint.config(
       },
       parser: tseslint.parser,
       parserOptions: {
-        project: true,
+        project: [
+          './tsconfig.json',
+          './tsconfig.node.json',
+          './tsconfig.web.json'
+        ],
         tsconfigRootDir: import.meta.dirname
       }
     },
