@@ -1,7 +1,18 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 
-// Add a placeholder API to the window object
-const api = {}
+// Expose a stable API surface on window.api
+const api = {
+  settings: {
+    close() {
+      ipcRenderer.send('settings:close')
+    },
+    proxy: {
+      submit(url: string) {
+        ipcRenderer.send('settings:proxy:submit', url)
+      }
+    }
+  }
+}
 
 try {
   contextBridge.exposeInMainWorld('api', api)

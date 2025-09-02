@@ -1,8 +1,10 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, Menu } from 'electron'
 import { join } from 'path'
 import { optimizer, is } from '@electron-toolkit/utils'
+import { configureGlobalUndiciProxy, hasStoredProxyUrl } from './network/proxy'
+import { openSettingsWindow } from './settings-window'
 
-function createWindow(): void {
+function createWindow(): BrowserWindow {
   const ASPECT_RATIO = 16 / 9
   const MIN_WIDTH = 800
   const INITIAL_WIDTH = 900
@@ -47,16 +49,48 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+  return mainWindow
+}
+
+function buildAppMenu(getMain: () => BrowserWindow | undefined): void {
+  const template: (Electron.MenuItemConstructorOptions | Electron.MenuItem)[] =
+    [
+      {
+        label: app.name,
+        submenu: [
+          {
+            label: 'Preferences…',
+            accelerator: 'CmdOrCtrl+,',
+            click: () => {
+              const win = getMain()
+              if (win) openSettingsWindow(win)
+            }
+          },
+          { type: 'separator' },
+          { role: 'quit' }
+        ]
+      },
+      {
+        role: 'editMenu'
+      }
+    ]
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 }
 
 app.whenReady().then(() => {
+  configureGlobalUndiciProxy()
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  createWindow()
+  let mainWindow = createWindow()
+  buildAppMenu(() => mainWindow)
+  if (!hasStoredProxyUrl()) {
+    openSettingsWindow(mainWindow)
+  }
 
   app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) mainWindow = createWindow()
   })
 })

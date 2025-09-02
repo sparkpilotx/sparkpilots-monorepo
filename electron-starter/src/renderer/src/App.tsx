@@ -1,6 +1,13 @@
 import type { JSX } from 'react'
+import { useLocationHash } from './hooks/use-location-hash'
+import { SettingsScreen } from './components/settings-screen'
 
 function App(): JSX.Element {
+  const hash = useLocationHash()
+
+  if (hash === '#/settings') {
+    return <SettingsScreen />
+  }
   return (
     <div className="h-screen bg-neutral-100 p-6 font-sans text-neutral-800 antialiased">
       <h1 className="text-2xl font-bold tracking-tight text-neutral-900">

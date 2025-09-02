@@ -1,7 +1,16 @@
 export {}
 
 declare global {
+  interface SettingsApi {
+    close: () => void
+    proxy: {
+      submit: (url: string) => void
+    }
+  }
   interface Window {
-    api: object
+    api: {
+      settings: SettingsApi
+      [key: string]: unknown
+    }
   }
 }

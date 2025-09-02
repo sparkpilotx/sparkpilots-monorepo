@@ -73,23 +73,4 @@
 
 - `electron-builder@26.0.12`
 
-## Testing
-
-- Unit: `vitest@3.2.4` + `jsdom@26.1.0`
-- React component tests: `@testing-library/react@16.3.0`, `@testing-library/jest-dom@6.8.0`, `@testing-library/user-event@14.6.1`
-- E2E: `@playwright/test@1.55.0` (Electron via `_electron` launcher)
-- Optional API mocking: `msw@2.11.1`
-
-Scripts
-
-- `test`: run unit tests with Vitest
-- `test:ui`: Vitest UI
-- `test:cov`: Vitest coverage (V8)
-- `e2e`: build app and run Playwright tests
-
-Configs
-
-- `vitest.config.ts` (renderer uses `jsdom`, setup at `src/renderer/test/setup.ts`)
-- `playwright.config.ts` (tests in `tests/e2e/`)
-
-See `docs/testing.md` for details.
+<!-- Testing stack removed -->
