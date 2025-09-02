@@ -28,8 +28,9 @@ export function openSettingsWindow(parent: BrowserWindow): void {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     child.loadURL(process.env['ELECTRON_RENDERER_URL'] + '#/settings')
   } else {
+    // Keep hash format consistent with dev (#/settings)
     child.loadFile(join(__dirname, '../renderer/index.html'), {
-      hash: 'settings'
+      hash: '/settings'
     })
   }
 
