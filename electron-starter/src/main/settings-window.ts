@@ -3,8 +3,16 @@ import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { configureGlobalUndiciProxy, saveProxyUrl } from './network/proxy'
 
+const settingsWindowRef: { current: BrowserWindow | null } = { current: null }
+
 export function openSettingsWindow(parent: BrowserWindow): void {
-  const child = new BrowserWindow({
+  if (settingsWindowRef.current && !settingsWindowRef.current.isDestroyed()) {
+    if (!settingsWindowRef.current.isVisible()) settingsWindowRef.current.show()
+    settingsWindowRef.current.focus()
+    return
+  }
+
+  const settingsWindow = new BrowserWindow({
     parent,
     modal: true,
     show: false,
@@ -23,13 +31,13 @@ export function openSettingsWindow(parent: BrowserWindow): void {
     }
   })
 
-  child.once('ready-to-show', () => child.show())
+  settingsWindow.once('ready-to-show', () => settingsWindow.show())
+  settingsWindowRef.current = settingsWindow
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    child.loadURL(process.env['ELECTRON_RENDERER_URL'] + '#/settings')
+    settingsWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '#/settings')
   } else {
-    // Keep hash format consistent with dev (#/settings)
-    child.loadFile(join(__dirname, '../renderer/index.html'), {
+    settingsWindow.loadFile(join(__dirname, '../renderer/index.html'), {
       hash: '/settings'
     })
   }
@@ -38,13 +46,14 @@ export function openSettingsWindow(parent: BrowserWindow): void {
     saveProxyUrl(url)
     configureGlobalUndiciProxy(url)
   }
-  const close = () => child.close()
+  const close = () => settingsWindow.close()
 
   ipcMain.on('settings:proxy:submit', submitProxy)
   ipcMain.on('settings:close', close)
 
-  child.on('closed', () => {
+  settingsWindow.on('closed', () => {
     ipcMain.off('settings:proxy:submit', submitProxy)
     ipcMain.off('settings:close', close)
+    settingsWindowRef.current = null
   })
 }

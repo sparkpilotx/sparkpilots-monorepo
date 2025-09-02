@@ -52,6 +52,4 @@ export function hasStoredProxyUrl(): boolean {
   return loadProxyUrl() != null
 }
 
-export const __internal = {
-  getProxyConfigPath
-}
+// Internals are intentionally not exported to keep module encapsulation tight per GEMINI.md
