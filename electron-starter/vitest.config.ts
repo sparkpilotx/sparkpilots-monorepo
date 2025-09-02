@@ -7,7 +7,24 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/renderer/test/setup.ts'],
     coverage: {
-      provider: 'v8'
+      provider: 'v8',
+      all: true,
+      include: ['src/**'],
+      exclude: [
+        'out/**',
+        'dist/**',
+        'coverage/**',
+        'node_modules/**',
+        'renderer/assets/**',
+        'vitest.config.ts',
+        'playwright.config.ts',
+        'electron.vite.config.ts',
+        'electron-builder.yml',
+        'tests/**',
+        'src/renderer/test/**'
+      ],
+      reporter: ['text', 'html', 'lcov'],
+      reportsDirectory: './coverage'
     },
     globals: true
   }
