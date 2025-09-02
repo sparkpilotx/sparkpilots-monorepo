@@ -1,7 +1,8 @@
-# Ignore artifacts:
-out
-dist
-node_modules
-
-# Ignore lockfiles
-package-lock.json
+node_modules/
+out/
+dist/
+coverage/
+playwright-report/
+test-results/
+.vite/
+.vitest/
