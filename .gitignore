@@ -38,3 +38,14 @@ bundle
 # Build output
 out/
 electron-starter/out/
+ 
+# Testing artifacts
+# Vitest coverage output
+coverage/
+electron-starter/coverage/
+
+# Playwright reports and results
+playwright-report/
+electron-starter/playwright-report/
+test-results/
+electron-starter/test-results/
