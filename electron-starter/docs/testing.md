@@ -25,6 +25,9 @@ This project uses Vitest for unit/component tests and Playwright for end-to-end 
   - excludes `tests/e2e/**` from unit collection
 - `playwright.config.ts`
   - testDir: `tests/e2e`
+- TypeScript: add global types in `tsconfig.json` and `tsconfig.web.json`
+  - `types`: `["vitest/globals", "@testing-library/jest-dom"]`
+  - include Playwright/Vitest config and tests in `tsconfig.json` `include`
 
 ## File Layout
 
