@@ -13,12 +13,17 @@
     "isolatedModules": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "./src/preload"],
+
     "baseUrl": ".",
     "paths": {
-      "@renderer/*": ["src/renderer/src/*"],
+      "@components/*": ["src/renderer/src/components/*"],
+      "@hooks/*": ["src/renderer/src/hooks/*"],
       "@shared/*": ["src/shared/*"]
     }
   },
-  "include": ["electron.vite.config.ts"]
+  "include": [
+    "src/renderer/src/**/*",
+    "src/preload/index.d.ts",
+    "electron.vite.config.ts"
+  ]
 }

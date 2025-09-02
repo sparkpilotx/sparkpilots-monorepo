@@ -1,6 +1,6 @@
 import type { JSX } from 'react'
-import { useLocationHash } from './hooks/use-location-hash'
-import { SettingsScreen } from './components/settings-screen'
+import { useLocationHash } from '@hooks/use-location-hash'
+import { SettingsScreen } from '@components/settings-screen'
 
 function App(): JSX.Element {
   const hash = useLocationHash()
@@ -17,6 +17,9 @@ function App(): JSX.Element {
         This is a minimal Electron starter with React, TypeScript, and Tailwind
         CSS v4.
       </p>
+      <div className="mt-6">
+        <SettingsScreen />
+      </div>
     </div>
   )
 }

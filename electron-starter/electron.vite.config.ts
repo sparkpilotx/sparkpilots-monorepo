@@ -29,7 +29,8 @@ export default defineConfig({
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@components': resolve('src/renderer/src/components'),
+        '@hooks': resolve('src/renderer/src/hooks')
       }
     }
   }

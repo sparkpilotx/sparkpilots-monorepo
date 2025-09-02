@@ -52,20 +52,7 @@ export default tseslint.config(
       // Flag deprecated imports via plugin-import
       'import/no-deprecated': 'warn',
       // Flag usage of any TS symbol marked with @deprecated
-      '@typescript-eslint/no-deprecated': 'warn',
-      // Disallow deprecated test utils import explicitly
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: 'react-dom/test-utils',
-              message:
-                'Deprecated. Import act from react instead: import { act } from "react".'
-            }
-          ]
-        }
-      ]
+      '@typescript-eslint/no-deprecated': 'warn'
     }
   },
   prettierConfig
